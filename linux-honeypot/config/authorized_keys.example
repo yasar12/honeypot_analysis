@@ -1,0 +1,45 @@
+# SSH Authorized Keys - MacBook için KISITLI Erişim
+# Bu dosya ~/.ssh/authorized_keys içine eklenecek
+
+# ÖNEMLİ: MacBook'un public key'inin BAŞINA bu kısıtlamaları ekle:
+
+# Tam örnek (MacBook'un key'i ile):
+# command="rsync --server --sender",no-pty,no-port-forwarding,no-X11-forwarding,no-agent-forwarding ssh-rsa AAAAB3NzaC1yc2EAAAADAQAB...
+
+# AÇIKLAMA:
+# - command="rsync --server --sender"  → Sadece rsync okuma (pull)
+# - no-pty                             → Shell erişimi YOK
+# - no-port-forwarding                 → Tunnel YOK
+# - no-X11-forwarding                  → X11 YOK
+# - no-agent-forwarding                → Agent forwarding YOK
+
+# KULLANIM:
+# 1. MacBook'tan public key'i al:
+#    cat ~/.ssh/id_rsa.pub
+#    # veya
+#    cat ~/.ssh/honeypot_key.pub
+#
+# 2. Linux'ta:
+#    nano ~/.ssh/authorized_keys
+#
+# 3. Yukarıdaki kısıtlamaları key'in BAŞINA ekle (aynı satırda):
+#    command="rsync --server --sender",no-pty,no-port-forwarding,no-X11-forwarding,no-agent-forwarding ssh-rsa AAAAB3...
+#
+# 4. Kaydet ve çıkış
+
+# TEST:
+# MacBook'tan shell dene (ÇALIŞMAMALI):
+#   ssh kullanici@LINUX_IP "whoami"
+#   → Hata vermeli veya rsync hatası
+#
+# MacBook'tan rsync (ÇALIŞMALI):
+#   ./sync_logs.sh
+#   → Başarılı olmalı
+
+# GÜVENLİK:
+# Bu kısıtlamalar ile:
+# ✅ Sadece log okuma izni
+# ✅ Shell yok
+# ✅ Tunnel yok
+# ✅ Saldırgan honeypot'u ele geçirse bile MacBook'a ulaşamaz
+
